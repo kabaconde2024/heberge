@@ -9,13 +9,23 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-mongoose.connect('mongodb://localhost:27017/kabaconde', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('Connecté à MongoDB local'))
-.catch(err => console.error('Erreur de connexion à MongoDB', err));
-// Modèle d'actualité
+const MONGODB_USER = 'kabaconde';
+const MONGODB_PASSWORD = 'g63yQnrdf2dP0MLU'; // À CHANGER IMMÉDIATEMENT
+const MONGODB_CLUSTER = 'cluster0.rpsw8o8'; // Nom réel de votre cluster
+const MONGODB_DBNAME = 'kabaconde';
+
+// Construction de l'URI
+const MONGODB_URI = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_CLUSTER}.mongodb.net/${MONGODB_DBNAME}?retryWrites=true&w=majority&appName=Cluster0`;
+
+// Connexion à MongoDB
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('✅ Connecté à MongoDB Atlas (Cluster0.rpsw8o8)'))
+  .catch(err => {
+    console.error('❌ Erreur de connexion:', err.message);
+    process.exit(1);
+  });
+
+  
 const Actualite = require('./models/Actualite');
 
 // API Routes
